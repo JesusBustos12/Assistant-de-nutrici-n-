@@ -1,0 +1,117 @@
+:root{
+    font-size: 10px;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-size: 2rem;
+    font-family: inter, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: rgb(77, 213, 168);
+}
+
+.layout{
+    width: 100vw;  
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.layout__header{
+    width: 85%;
+    padding: 3rem;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.header__img{
+    width: 55px;
+    height: 55px;
+    margin-right: 2rem;
+    margin-bottom: 10px;
+}
+
+.header__title{
+    font-size: 4.5rem;
+    font-weight: 700;
+    word-spacing: 0.5rem;
+    letter-spacing: 0.2rem;
+}
+
+.layout__chat{
+    width: 107rem;
+    height: 55rem;
+    background-color:rgb(206, 150, 67);
+    padding: 2rem;
+    margin-top: -1rem;
+    margin-left: 7rem;
+    border-radius: 1.5rem;
+}
+
+.chat__messages{
+    width: 100%;
+    min-height: 90%;
+    background-color: rgb(107, 157, 201);
+    margin-bottom: 1.3rem;
+    padding: 2rem;
+    border-radius: 2rem;
+    word-wrap:break-word;
+
+    display: flex;
+    flex-wrap:wrap;
+}
+
+.chat__inputs{
+    width: calc(100% - 4px);
+
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+#inputText{
+    flex: 13;
+    padding: 1.2rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color:black;
+    opacity: 0.9;
+    border: none;
+    outline: none;
+    cursor: auto;
+    border-radius: 1.5rem;
+    transition: all 350ms ease-out;
+}
+
+#inputText:focus{
+    box-shadow: 0 0 6px #a5a5a5 inset;
+}
+
+#inputBtn{
+    flex: 3;
+    padding: 1.2rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    background-color:rgb(63, 205, 127);
+    color: white;
+    border: 1px solid black;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+}
+
+#inputBtn:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+}
