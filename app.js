@@ -2,14 +2,18 @@ import express from "express";
 import dotenv from "dotenv";
 import OpenAI  from "openai";
 import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //Configuraciones del servidor:
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, "public")));
 
 //Middleware:
 app.use(express.json());
@@ -164,6 +168,9 @@ app.post("/api/assistant-diet", async(req, res) => {
             console.log(dataUser[userId]);
         } 
 
+        // Limpiar datos del usuario tras completar
+        delete dataUser[userId];
+
         return res.json({
             reply: diet,
             isFinal: true
@@ -176,4 +183,8 @@ app.post("/api/assistant-diet", async(req, res) => {
 //Servir el Back-end:
 app.listen(port, () => {
     console.log("Tu servidor esta iniciando en: http://localhost:" + port);
+
 });
+
+// Exportar la app para Vercel
+export default app;
