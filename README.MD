@@ -47,7 +47,7 @@ Como desarrollador autodidacta, creé este proyecto para:
 
 ## Estructura del proyecto
 pro_4---assistant-de-nutricion-con-ia/
-├── app.js                    # Servidor Express + lógica OpenAI y rutas API
+├── index.js                    # Servidor Express + lógica OpenAI y rutas API
 ├── package.json
 ├── package-lock.json
 ├── .env.example              # Plantilla para variables de entorno (sin clave)
@@ -68,18 +68,6 @@ Este proyecto refleja competencias reales de un Junior Full-Stack listo para apo
 - Diseño UI/UX cuidado: paleta coherente, feedback visual, responsive design y atención al detalle.
 - Seguridad y buenas prácticas: variables de entorno, .gitignore correcto, código mantenible.
 - Producto completo, funcional y listo para producción.
-
-## Cómo ejecutarlo localmente
-1. Clona el repositorio.
-2. Crea un archivo `.env` en la raíz con tu clave:
-OPENAI_API_KEY=sk-...
-PORT=3000
-text3. Instala dependencias:
-```bash
-npm install
-
-Inicia el servidor:Bashnpm start
-Abre http://localhost:3000 en tu navegador.
 
 ## Demo en vivo
 (En cuanto lo despliegue, actualizaré el enlace aquí)
@@ -105,5 +93,6 @@ GitHub: github.com/JesusBustos12
 LinkedIn: linkedin.com/in/jesus-bustos-arizmendi-325329283
 Correo: jesusbustosarizmendi0@gmail.com
 Celular/WhatsApp: +52 762 119 2732
+
 
 ¡Gracias por revisar mi trabajo! 🚀
