@@ -2,24 +2,24 @@ import express from "express";
 import dotenv from "dotenv";
 import OpenAI  from "openai";
 import path from "path";
-import { fileURLToPath } from "url";
 
 dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 //Configuraciones del servidor:
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 //Middleware:
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+});
 
 //apiKey del OpenAI:
 const openai = new OpenAI({
@@ -186,5 +186,3 @@ app.listen(port, () => {
 
 });
 
-// Exportar la app para Vercel
-export default app;
