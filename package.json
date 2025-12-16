@@ -1,7 +1,7 @@
 {
   "name": "pro_4---assistant-de-nutricion-con-ia",
   "version": "1.0.0",
-  "description": "Agente de IA para crear dietas ",
+  "description": "Agente de IA para crear dietas",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -15,7 +15,6 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "nodemon": "^3.1.11",
-    "openai": "^6.13.0",
-    "path": "^0.12.7"
+    "openai": "^6.13.0"
   }
 }
