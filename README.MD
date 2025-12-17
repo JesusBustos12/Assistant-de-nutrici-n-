@@ -70,7 +70,7 @@ Este proyecto refleja competencias reales de un Junior Full-Stack listo para apo
 - Producto completo, funcional y listo para producción.
 
 ## Demo en vivo
-(En cuanto lo despliegue, actualizaré el enlace aquí)
+(https://assistant-de-nutrici-n.vercel.app/)
 
 ## Notas para empleadores
 Este es uno de mis proyectos full-stack más completos y útiles hasta la fecha.
@@ -96,3 +96,4 @@ Celular/WhatsApp: +52 762 119 2732
 
 
 ¡Gracias por revisar mi trabajo! 🚀
+
