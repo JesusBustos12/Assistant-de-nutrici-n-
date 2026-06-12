@@ -25,11 +25,13 @@ body {
     font-family: inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg-main);
     color: var(--text-main);
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden; /* Evita cualquier scroll fuera del panel */
 }
 
 .layout {
     width: 100vw;
+    height: 100vh; /* Constriñe el panel al alto de la pantalla */
     color: var(--text-main);
 
     display: flex;
@@ -74,13 +76,14 @@ body {
 
 .layout__chat {
     width: 107rem;
-    height: 60rem; /* Un poco más de altura para dar aire */
+    max-width: 95vw;
+    flex: 1; /* Esto hace que tome solo el espacio restante sin generar scroll */
+    max-height: 70rem;
+    margin-bottom: 2rem;
     background: var(--bg-chat-container);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     padding: 3.5rem; /* Aumentar padding interno */
-    margin-top: -1rem;
-    margin-left: 7rem;
     border-radius: 3rem;
     box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -278,7 +281,6 @@ tbody tr:hover {
 @media (max-width: 1200px) {
     .layout__chat {
         width: 90rem;
-        height: 50rem;
         margin-left: 0;
     }
 }
@@ -300,7 +302,6 @@ tbody tr:hover {
 
     .layout__chat {
         width: 80rem;
-        height: 45rem;
     }
 
     .chat__inputs {
@@ -337,7 +338,6 @@ tbody tr:hover {
 
     .layout__chat {
         width: 95%;
-        height: 40rem;
         padding: 1.5rem;
     }
 
@@ -374,10 +374,6 @@ tbody tr:hover {
         font-size: 2.5rem;
     }
 
-    .layout__chat {
-        height: 35rem;
-    }
-
     .chat__inputs {
         gap: 1rem;
     }
@@ -404,10 +400,6 @@ tbody tr:hover {
     .header__img {
         width: 40px;
         height: 40px;
-    }
-
-    .layout__chat {
-        height: 30rem;
     }
 
     .chat__message {
