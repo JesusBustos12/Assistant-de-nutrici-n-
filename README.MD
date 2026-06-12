@@ -1,4 +1,4 @@
-# Asistente de Nutrición con IA - Portafolio Full-Stack
+# Asistente de Nutrición con IA - Portafolio Full-Stack (Arquitectura Senior)
 
 ## Descripción
 Aplicación web full-stack que genera **dietas personalizadas** utilizando la API de Chat Completions de OpenAI (modelo GPT-4o-mini).  
@@ -12,88 +12,90 @@ El usuario responde paso a paso a una serie de preguntas conversacionales sobre 
 - Total de calorías del día
 - Número total de platillos (estrictamente el número solicitado por el usuario)
 
-Todo ello con un diseño conversacional limpio, moderno y totalmente responsive, construido con **Node.js, Express, JavaScript vanilla y CSS puro** (sin frameworks).
+Todo ello con un diseño conversacional con estilo "Premium Lite" (Glassmorphism), construido con **Node.js, Express, JavaScript Vanilla (ES Modules) y CSS puro** (sin frameworks). El proyecto cuenta con una arquitectura de nivel empresarial (MVC), seguridad avanzada (Rate Limiting y protección XSS) y un sistema de estado en el cliente para soportar despliegues Serverless.
 
-Perfecto para demostrar habilidades full-stack reales en un portafolio profesional.
+Perfecto para demostrar habilidades full-stack reales y avanzadas en un portafolio profesional.
 
 ## Objetivo
 Como desarrollador autodidacta, creé este proyecto para:
 
-- Mostrar dominio completo de Node.js + Express en el backend.
-- Integrar de forma segura y eficiente la API de chat de OpenAI para generar contenido estructurado.
-- Diseñar prompts avanzados que manejen datos incompletos o erróneos (corrigiendo palabras incompletas y estimando valores probables basados en estadísticas).
-- Crear una interfaz de chat intuitiva y atractiva con excelente experiencia de usuario.
-- Aplicar buenas prácticas: variables de entorno, manejo de estado por usuario, código limpio, seguro y escalable.
-- Tener un proyecto funcional, visualmente atractivo y listo para producción que resuelva un problema real: la creación de dietas personalizadas.
+- Mostrar dominio completo de Node.js + Express en el backend con una arquitectura **MVC (Model-View-Controller)** escalable.
+- Integrar de forma segura y eficiente la API de chat de OpenAI mediante servicios modulares y tipado con JSDoc.
+- Diseñar prompts avanzados que manejen datos incompletos o erróneos basándose en estadística o probabilidad.
+- Construir interfaces web atractivas con CSS moderno (animaciones elásticas, CSS variables, glassmorphism) mejorando la experiencia del usuario.
+- Aplicar ingeniería de seguridad web: protección contra inyecciones XSS, ocultamiento de API Keys y prevención de abusos con **Rate Limiting**.
+- Solucionar problemas arquitectónicos complejos, como la pérdida de estado en entornos **Serverless** (Vercel), trasladando la máquina de estados al cliente de forma eficiente.
+- Implementar Unit Testing automatizado en el servidor para garantizar la robustez del código.
 
 ## Características
-- Interfaz conversacional que guía al usuario pregunta por pregunta.
-- Generación inteligente de dietas: corrige entradas inválidas, completa datos faltantes con valores probables y respeta estrictamente alergias y preferencias.
-- Salida en tabla Markdown estricta, renderizada automáticamente en HTML.
-- Feedback visual de carga con animación "Cargando...".
-- Totalmente responsive (móvil, tablet y escritorio).
-- Protección de la API key con `dotenv` (nunca expuesta).
-- Listo para desplegar en Render, Vercel, Railway, Hostinger, etc.
+- **Arquitectura MVC y ES Modules**: Código 100% modular, separando rutas, controladores, servicios y lógica de UI/API sin requerir empaquetadores complejos.
+- **Máquina de Estado en el Cliente**: Flujo conversacional optimizado que recolecta respuestas localmente para hacer una única petición segura al backend, ahorrando costos e invocaciones lambda.
+- **Diseño Premium y Dinámico**: Interfaz que guía al usuario con transiciones fluidas, feedback visual y bloqueo interactivo para prevenir el spam.
+- **Seguridad y Rate Limiting**: Limitador de peticiones integrado para proteger los créditos de OpenAI de ataques de denegación o bots.
+- **Generación Inteligente**: Corrige entradas inválidas, completa datos faltantes con valores probables y respeta estrictamente preferencias.
+- **Testing Automatizado**: Pruebas unitarias configuradas para validar la robustez de los endpoints.
 
 ## Tecnologías utilizadas
-- **Node.js + Express** → Servidor backend, rutas API y manejo de estado conversacional.
-- **OpenAI Chat Completions API (GPT-4o-mini)** → Generación de dietas con prompts avanzados y control estricto del formato.
-- **JavaScript vanilla** → Lógica frontend (fetch, eventos, manipulación del DOM, renderizado de Markdown con `markdown-it`).
-- **HTML5 + CSS3 puro** → Diseño moderno con flexbox, transiciones, loader animado y tablas responsive.
+- **Node.js + Express** → Servidor backend, rutas y middleware de seguridad.
+- **express-rate-limit** → Protección contra abusos de la API.
+- **OpenAI Chat Completions API (GPT-4o-mini)** → Generación de dietas con control estricto de formato.
+- **JavaScript Vanilla (ES6 Modules)** → Frontend modular (`api.js`, `ui.js`, `main.js`) y fetch nativo.
+- **Jest + Supertest** → Pruebas unitarias automatizadas.
+- **HTML5 + CSS3 puro** → Diseño Glassmorphism, CSS Variables, animaciones `@keyframes` y diseño completamente responsive.
 - **dotenv** → Gestión segura de variables de entorno.
-- **markdown-it** → Renderizado de Markdown a HTML en el cliente.
-- **Nodemon** → Desarrollo rápido con recarga automática.
-- **Git & GitHub** → Control de versiones.
+- **markdown-it** → Renderizado seguro de Markdown a HTML en el cliente.
 
 ## Estructura del proyecto
 pro_4---assistant-de-nutricion-con-ia/
-├── index.js                    # Servidor Express + lógica OpenAI y rutas API
+├── app.js                    # Punto de entrada del servidor Express
+├── routes/
+│   └── dietRoutes.js         # Enrutador de la API y middlewares
+├── controllers/
+│   └── dietController.js     # Lógica de validación HTTP y respuestas
+├── services/
+│   └── openaiService.js      # Comunicación con OpenAI y Prompts
+├── tests/
+│   └── diet.test.js          # Pruebas unitarias con Jest
 ├── package.json
-├── package-lock.json
-├── .env.example              # Plantilla para variables de entorno (sin clave)
-├── .gitignore                # Protege .env y node_modules
+├── .env.example              # Plantilla para variables de entorno
+├── .gitignore                
 ├── public/
-│   ├── index.html            # Página principal con el chat
+│   ├── index.html            # UI principal
 │   ├── Assets/
-│   │   ├── CSS/styles.css    # Estilos limpios y responsive
-│   │   ├── JS/main.js        # Lógica frontend (eventos, fetch, render)
-│   │   └── Imgs/             # Imágenes (comida-sana.png, etc.)
+│   │   ├── CSS/styles.css    # Estilos Premium (Glassmorphism, variables)
+│   │   ├── JS/api.js         # Fetch y comunicación con backend
+│   │   ├── JS/ui.js          # Manipulación del DOM y renderizado Markdown
+│   │   ├── JS/main.js        # Orquestador del estado de la app
+│   │   └── Imgs/             
 └── README.md                 # Esta documentación
-text## Habilidades demostradas
-Este proyecto refleja competencias reales de un Junior Full-Stack listo para aportar valor:
 
-- Backend sólido: rutas POST, async/await, manejo de estado por usuario (IDs únicos), integración segura de API externa compleja.
-- Ingeniería de prompts avanzada: control de formato estricto, manejo de entradas erróneas/incompletas y restricciones temáticas.
-- Frontend limpio sin frameworks: manipulación del DOM, eventos, fetch nativo y renderizado dinámico.
-- Diseño UI/UX cuidado: paleta coherente, feedback visual, responsive design y atención al detalle.
-- Seguridad y buenas prácticas: variables de entorno, .gitignore correcto, código mantenible.
-- Producto completo, funcional y listo para producción.
+## Habilidades demostradas
+Este proyecto refleja competencias de un desarrollador Full-Stack avanzado (Nivel Ssr) listo para aportar valor:
+
+- **Arquitectura de Software:** Separación de responsabilidades (MVC) y modularización nativa sin frameworks (ES Modules).
+- **Resolución de Problemas:** Adaptación del flujo de la app para persistencia de datos en entornos Serverless (Vercel).
+- **Backend Sólido y Seguro:** Manejo de peticiones asíncronas, Unit Testing, Rate Limiting y validación estricta.
+- **Ingeniería de Prompts Avanzada:** Control de formato estricto y manejo estadístico de parámetros ausentes.
+- **Frontend y Diseño Moderno:** Creación de UI/UX fluida con físicas elásticas, prevención de bugs de cliente (bloqueo de eventos) y sanitización de outputs.
+- Producto completo, seguro, escalable y listo para producción empresarial.
 
 ## Demo en vivo
 (https://assistant-de-nutrici-n.vercel.app/)
 
 ## Notas para empleadores
-Este es uno de mis proyectos full-stack más completos y útiles hasta la fecha.
-Lo construí desde cero, enfocándome tanto en la funcionalidad como en la experiencia del usuario.
-Demuestra que:
+Este es uno de mis proyectos full-stack más completos y robustos hasta la fecha. Lo construí desde cero enfocándome tanto en la funcionalidad y experiencia de usuario, como en la calidad subyacente del código. Demuestra que:
 
-Puedo integrar APIs avanzadas de OpenAI de forma segura y efectiva.
-Domino backend y frontend sin depender de frameworks pesados.
-Me importa el detalle visual y la usabilidad.
-Escribo prompts robustos que garantizan resultados consistentes.
-Entrego productos completos, seguros y listos para producción.
+- Entiendo y aplico patrones de diseño de software (MVC, Módulos).
+- Domino backend y frontend sin depender de frameworks pesados, conociendo a fondo JavaScript.
+- Me preocupo por la seguridad, el testing automatizado y la protección de recursos en la nube.
+- Escribo prompts estructurados que garantizan resultados consistentes en Inteligencia Artificial.
+- Estoy capacitado para identificar problemas de infraestructura (como la pérdida de estado en Serverless) y solucionarlos con reingeniería inteligente.
 
-Estoy 100% listo para aportar valor real en un equipo como Junior Full-Stack Developer.
-Contacto
-Busco mi primera oportunidad como desarrollador web full-stack.
-¡Me encantaría trabajar contigo!
+Estoy 100% listo para aportar valor real en un equipo como Full-Stack Developer. Busco mi primera oportunidad profesional y ¡me encantaría trabajar contigo!
 
 ## Contacto
-GitHub: github.com/JesusBustos12
-LinkedIn: linkedin.com/in/jesus-bustos-arizmendi-325329283
-Correo: jesusbustosarizmendi0@gmail.com
-Celular/WhatsApp: +52 762 119 2732
-
+- **GitHub:** github.com/JesusBustos12
+- **LinkedIn:** linkedin.com/in/jesus-bustos-arizmendi-325329283
+- **Correo:** jesusbustosarizmendi0@gmail.com
 
 ¡Gracias por revisar mi trabajo! 🚀
-
