@@ -15,7 +15,14 @@ export async function sendDietRequest(dataUser) {
     });
 
     if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        let errorMsg = `HTTP error! status: ${response.status}`;
+        try {
+            const errData = await response.json();
+            if (errData && errData.reply) {
+                errorMsg = errData.reply;
+            }
+        } catch(e) {}
+        throw new Error(errorMsg);
     }
 
     const data = await response.json();

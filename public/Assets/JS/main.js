@@ -46,7 +46,7 @@ const startDiet = async () => {
         renderDietMarkdown(reply);
     } catch (error) {
         console.error("Error en la petición:", error);
-        createMessages('Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
+        createMessages(error.message || 'Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
     } finally {
         setInputsDisabled(false);
         // Reiniciar estado si se desea otra dieta

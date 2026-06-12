@@ -25,7 +25,7 @@ export const handleDietRequest = async (req, res) => {
     } catch (error) {
         console.error("Error procesando petición:", error);
         return res.status(500).json({
-            reply: 'Hubo un error al procesar la solicitud en el servidor.'
+            reply: 'Fallo en el servidor: ' + error.message
         });
     }
 };

@@ -52,15 +52,15 @@ export async function generateDietContext(create) {
         Dia - Dia de la semana.
         Platillos - Básicamente es el platillo de la dieta.
         Ingredientes - Son los ingredientes de la comida de la dieta.
-        Calorias - las calorías que aporta esa comida concreta.
-        Total de calorias del dia - Debe ser *estrictamente* la suma exacta de las calorias de *todos* los platillos de ese dia.
+        Calorias - las calorías que aporta esa comida concreta (solo el número).
+        Total de calorias del dia - REGLA MATEMÁTICA ESTRICTA: Debe ser exactamente la suma real de la columna "Calorias" de todos los platillos de ese día. (Ejemplo: Si los platillos del lunes tienen 350, 250 y 150 calorías, aquí DEBES poner 750). No inventes este número, súmalo correctamente.
         Numero total de platillos - Debes incluir estrictamente ${create.numComida} platillos por cada día de la semana.
 
         Las filas son los dias de la semana de lunes a domingo.
 
         Una vez creada la dieta, quiero que la respuesta entregada sea en formato de: 'Tabla markdown' o 'markdownit'.
 
-        ¡Posdata. Solo quiero la dieta sin datos adicionales como: esta es la dieta creada para ti, o símbolos extraños como: $,%,#,* entre otros!
+        ¡Posdata. Solo quiero la tabla markdown sin datos adicionales como: esta es la dieta creada para ti, o símbolos extraños como: $,%,#,* entre otros!
     `;
 
     try {
@@ -76,7 +76,7 @@ export async function generateDietContext(create) {
 
         return completion.choices[0].message.content.trim();
     } catch(exception) {
-        console.error(exception, "Error con la respuesta del modelo.");
-        throw new Error('Error con la comunicación del servidor de IA.');
+        console.error("Error detallado de OpenAI:", exception);
+        throw new Error('Error de OpenAI: ' + exception.message);
     }
 }
