@@ -78,6 +78,7 @@ body {
     width: 107rem;
     max-width: 95vw;
     flex: 1; /* Esto hace que tome solo el espacio restante sin generar scroll */
+    min-height: 0; /* CRÍTICO: Evita que el contenedor crezca cuando se añaden mensajes */
     max-height: 70rem;
     margin-bottom: 2rem;
     background: var(--bg-chat-container);
