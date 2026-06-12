@@ -30,9 +30,9 @@ const openai = new OpenAI({
 async function modelContext(create){
 
     const promptSystem = `
-        Quiero que actues como un experto en nutricion con decadas de experiencia.
+        Quiero que actúes como un experto en nutrición con décadas de experiencia.
 
-        Solo aceptaras a responder a las preguntas o a las caracteristicas que se presentan a acontinuacion:
+        Solo aceptarás responder a las preguntas o a las características que se presentan a continuación:
         peso - ${create.peso}.
         altura - ${create.altura}.
         meta - ${create.meta}.
@@ -40,12 +40,12 @@ async function modelContext(create){
         noGuAlimento - ${create.noGuAlimento}.
         numComida - ${create.numComida}.
 
-        ¡Cualquier otra pregunta que no tenga relacion con la nutricion sera denegada!
+        ¡Cualquier otra pregunta que no tenga relación con la nutrición será denegada!
 
     `;
 
     const promptUser = `
-        Toma en cuenta las caracteristicas que se presentan a acontinuacion:
+        Toma en cuenta las características que se presentan a continuación:
         peso - ${create.peso}.
         altura - ${create.altura}.
         meta - ${create.meta}.
@@ -53,24 +53,24 @@ async function modelContext(create){
         noGuAlimento - ${create.noGuAlimento}.
         numComida - ${create.numComida}.
 
-        ¡Si cualquiera de las caracteristicas no esta presente o tenga otro valor quiero que en vase a estadistica o probabilidad
-        inventes un valor para esa caracteristica. Ejemplo: peso: 88 altura: njcbsj. Como puedes ver altura no tiene sentido entoces tu tienes que inventarte el valor mas provable. Talves en esta caso seria altura: 1.80. Esto vasado en el peso.!
+        ¡Si cualquiera de las características no está presente o tiene otro valor, quiero que en base a estadística o probabilidad
+        inventes un valor para esa característica. Ejemplo: peso: 88 altura: njcbsj. Como puedes ver, la altura no tiene sentido, entonces tienes que inventar el valor más probable. Tal vez en este caso sería altura: 1.80. Esto basado en el peso.!
 
-        ¡Tambien si existen palabras entrecortadas como por ejemplo: adel. Quiere decir que debes de buscar acompletar en una plabra posible o con sentido la palabra imcompleta. En esta caso talves pueda ser: adelgazar!
+        ¡También si existen palabras entrecortadas como por ejemplo: adel, quiere decir que debes buscar completar con una palabra posible o con sentido la palabra incompleta. En este caso tal vez pueda ser: adelgazar!
 
-        Quiero el input o datos de entrada del usuario este en formato: 'MarkDown'. Solo quiero la dieta con estas columnas de acontinuacion:
+        Quiero que el input o datos de entrada del usuario esté en formato: 'MarkDown'. Solo quiero la dieta con estas columnas a continuación:
         Dia - Dia de la semana.
-        Platillos - Basica mente es el platillo de la dieta.
+        Platillos - Básicamente es el platillo de la dieta.
         Ingredientes - Son los ingredientes de la comida de la dieta.
-        Calorias - las calorias que aporta esa comida concreta.
+        Calorias - las calorías que aporta esa comida concreta.
         Total de calorias del dia - Debe ser *estrictamente* la suma exacta de las calorias de *todos* los platillos de ese dia.
         Numero total de platillos - Debes incluir estrictamente ${create.numComida} platillos por cada día de la semana.
 
         Las filas son los dias de la semana de lunes a domingo.
 
-        Una ves creada la dieta quiero que la respuesta entregada sea en formato de: 'Tabla markdown' o 'markdownit'.
+        Una vez creada la dieta, quiero que la respuesta entregada sea en formato de: 'Tabla markdown' o 'markdownit'.
 
-        ¡Posdata. Solo quiero la dieta sin datios adicionales como: esta es la dieta creada para ti o sigbolos estraños como: $,%,#,* entre otros!
+        ¡Posdata. Solo quiero la dieta sin datos adicionales como: esta es la dieta creada para ti, o símbolos extraños como: $,%,#,* entre otros!
 
     `;
 
@@ -103,76 +103,93 @@ const dataUser = {};
 
 //Gestion de las peticiones http de tipo post:
 app.post("/api/assistant-diet", async(req, res) => {
+    try {
+        const userId = req.body?.id;
+        const userMessage = req.body?.message;
 
-    const userId = req.body.id;
-    const userMessage = req.body.message;
+        if(!userId || !userMessage) {
+            return res.status(400).json({ reply: 'Solicitud inválida' });
+        }
 
-    if(!dataUser[userId]){
-        dataUser[userId] = {};
-    }
-
-    if(!dataUser[userId].peso){
-        dataUser[userId].peso = userMessage;
-
-        return res.json({
-            reply: '¿Cual es tu altura en (Cm)?',
-            isFinal: false
-        });
-    }
-
-    if(!dataUser[userId].altura){
-        dataUser[userId].altura = userMessage;
-
-        return res.json({
-            reply: '¿Cual es tu meta? (Adelgazar, mantener peso, ganar peso)',
-            isFinal: false
-        });
-    }
-
-    if(!dataUser[userId].meta){
-        dataUser[userId].meta = userMessage;
-
-        return res.json({
-            reply: '¿Le tienes alergia algun ingrediente?',
-            isFinal: false
-        });
-    }
-
-    if(!dataUser[userId].alergia){
-        dataUser[userId].alergia = userMessage;
-
-        return res.json({
-            reply: '¿Que alimentos no te gustan?',
-            isFinal: false
-        });
-    }
-
-    if(!dataUser[userId].noGuAlimento){
-        dataUser[userId].noGuAlimento = userMessage;
-
-        return res.json({
-            reply: '¿Cuantas comidas quieres hacer por dia?',
-            isFinal: false
-        });
-    }
-
-    if(!dataUser[userId].numComida){
-        dataUser[userId].numComida = userMessage;
-
-        const diet = await modelContext(dataUser[userId]);
-
-        if (dataUser[userId].peso && dataUser[userId].altura && dataUser[userId].meta
-            && dataUser[userId].alergia && dataUser[userId].noGuAlimento && dataUser[userId].numComida
-        ){
+        if(!dataUser[userId]){
             dataUser[userId] = {};
-            console.log(dataUser[userId]);
-        } 
+        }
 
-        return res.json({
-            reply: diet,
-            isFinal: true
+        // Cleanup de sesiones inactivas (más de 10 min)
+        dataUser[userId].lastActivity = Date.now();
+        for (const id in dataUser) {
+            if (Date.now() - dataUser[id].lastActivity > 10 * 60 * 1000) {
+                delete dataUser[id];
+            }
+        }
+
+        if(!dataUser[userId].peso){
+            dataUser[userId].peso = userMessage;
+
+            return res.json({
+                reply: '¿Cual es tu altura en (Cm)?',
+                isFinal: false
+            });
+        }
+
+        if(!dataUser[userId].altura){
+            dataUser[userId].altura = userMessage;
+
+            return res.json({
+                reply: '¿Cual es tu meta? (Adelgazar, mantener peso, ganar peso)',
+                isFinal: false
+            });
+        }
+
+        if(!dataUser[userId].meta){
+            dataUser[userId].meta = userMessage;
+
+            return res.json({
+                reply: '¿Le tienes alergia algun ingrediente?',
+                isFinal: false
+            });
+        }
+
+        if(!dataUser[userId].alergia){
+            dataUser[userId].alergia = userMessage;
+
+            return res.json({
+                reply: '¿Que alimentos no te gustan?',
+                isFinal: false
+            });
+        }
+
+        if(!dataUser[userId].noGuAlimento){
+            dataUser[userId].noGuAlimento = userMessage;
+
+            return res.json({
+                reply: '¿Cuantas comidas quieres hacer por dia?',
+                isFinal: false
+            });
+        }
+
+        if(!dataUser[userId].numComida){
+            dataUser[userId].numComida = userMessage;
+
+            const diet = await modelContext(dataUser[userId]);
+
+            if (dataUser[userId].peso && dataUser[userId].altura && dataUser[userId].meta
+                && dataUser[userId].alergia && dataUser[userId].noGuAlimento && dataUser[userId].numComida
+            ){
+                delete dataUser[userId];
+            } 
+
+            return res.json({
+                reply: diet,
+                isFinal: true
+            });
+
+        }
+    } catch (error) {
+        console.error("Error procesando petición:", error);
+        return res.status(500).json({
+            reply: 'Hubo un error al procesar la solicitud en el servidor.'
         });
-
     }
 
 });

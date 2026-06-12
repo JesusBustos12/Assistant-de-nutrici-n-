@@ -4,7 +4,7 @@ const inputBtn = document.getElementById("inputBtn");
 const boxMessages = document.querySelector(".chat__messages");
 
 //Id:
-const userId = Date.now() + Math.floor(100 + Math.random() * 1000);
+const userId = crypto.randomUUID();
 
 //Funcion para la creacion de los mensajes:
 function createMessages(messageValue, sender){
@@ -32,67 +32,67 @@ const startDiet = async() => {
 
     inputText.value = "";
 
+    // Deshabilitar inputs
+    inputText.disabled = true;
+    inputBtn.disabled = true;
+
     //Añadir los argumentos:
     createMessages(myMessage, "user");
     createMessages('<div class="loader"></div>', "bot");
 
-    const response = await fetch("/api/assistant-diet", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id: userId, message: myMessage
-        })
-    });
+    try {
+        const response = await fetch("/api/assistant-diet", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: userId, message: myMessage
+            })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    console.log("Respuesta de la API:", data);
+        console.log("Respuesta de la API:", data);
 
-    //Sacar el ultimo mensaje del bot:
-    const msgBot = document.querySelectorAll(".chat__message--ia");
-    const lastMsgBot = msgBot[msgBot.length - 1];
+        //Sacar el ultimo mensaje del bot:
+        const msgBot = document.querySelectorAll(".chat__message--ia");
+        const lastMsgBot = msgBot[msgBot.length - 1];
 
-    //Rutear la respuesta data.reply:
-    if(lastMsgBot){
-
-        if(true){
+        //Rutear la respuesta data.reply:
+        if(lastMsgBot){
 
             try{
-
-                const msgDiet = new markdownit();
+                const msgDiet = new markdownit({ html: false });
                 const msgFinally = msgDiet.render(data.reply);
                 lastMsgBot.innerHTML = msgFinally;
-                boxMessages.scrollTop = boxMessages.scrollHeight;
-
             }catch(exception){
                 console.log(exception);
                 lastMsgBot.textContent = data.reply;
             }
 
+            boxMessages.scrollTop = boxMessages.scrollHeight;
+
         }else{
-            lastMsgBot.textContent = data.reply;
+            console.log("Error: No se encontró el último mensaje del bot para actualizar.");
         }
-
-        boxMessages.scrollTop = boxMessages.scrollHeight;
-
-    }else{
-        console.log("Error: No se encontró el último mensaje del bot para actualizar.");
+    } catch (error) {
+        console.error("Error en la petición:", error);
+    } finally {
+        // Habilitar inputs
+        inputText.disabled = false;
+        inputBtn.disabled = false;
+        inputText.focus();
     }
 
 }
 
 //Eventos:
-inputBtn.addEventListener("click", startDiet);
+const chatForm = document.getElementById("chatForm");
 
-inputText.addEventListener("keydown", (event) => {
-
-    if(event.key === "Enter"){
-
+if (chatForm) {
+    chatForm.addEventListener("submit", (event) => {
         event.preventDefault();
         startDiet();
-
-    }
-
-});
+    });
+}
