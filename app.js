@@ -99,92 +99,21 @@ async function modelContext(create){
 
 }
 
-const dataUser = {};
-
-//Gestion de las peticiones http de tipo post:
 app.post("/api/assistant-diet", async(req, res) => {
     try {
-        const userId = req.body?.id;
-        const userMessage = req.body?.message;
+        const { peso, altura, meta, alergia, noGuAlimento, numComida } = req.body;
 
-        if(!userId || !userMessage) {
-            return res.status(400).json({ reply: 'Solicitud inválida' });
+        if(!peso || !altura || !meta || !alergia || !noGuAlimento || !numComida) {
+            return res.status(400).json({ reply: 'Faltan datos para crear la dieta.' });
         }
 
-        if(!dataUser[userId]){
-            dataUser[userId] = {};
-        }
+        const diet = await modelContext(req.body);
 
-        // Cleanup de sesiones inactivas (más de 10 min)
-        dataUser[userId].lastActivity = Date.now();
-        for (const id in dataUser) {
-            if (Date.now() - dataUser[id].lastActivity > 10 * 60 * 1000) {
-                delete dataUser[id];
-            }
-        }
+        return res.json({
+            reply: diet,
+            isFinal: true
+        });
 
-        if(!dataUser[userId].peso){
-            dataUser[userId].peso = userMessage;
-
-            return res.json({
-                reply: '¿Cual es tu altura en (Cm)?',
-                isFinal: false
-            });
-        }
-
-        if(!dataUser[userId].altura){
-            dataUser[userId].altura = userMessage;
-
-            return res.json({
-                reply: '¿Cual es tu meta? (Adelgazar, mantener peso, ganar peso)',
-                isFinal: false
-            });
-        }
-
-        if(!dataUser[userId].meta){
-            dataUser[userId].meta = userMessage;
-
-            return res.json({
-                reply: '¿Le tienes alergia algun ingrediente?',
-                isFinal: false
-            });
-        }
-
-        if(!dataUser[userId].alergia){
-            dataUser[userId].alergia = userMessage;
-
-            return res.json({
-                reply: '¿Que alimentos no te gustan?',
-                isFinal: false
-            });
-        }
-
-        if(!dataUser[userId].noGuAlimento){
-            dataUser[userId].noGuAlimento = userMessage;
-
-            return res.json({
-                reply: '¿Cuantas comidas quieres hacer por dia?',
-                isFinal: false
-            });
-        }
-
-        if(!dataUser[userId].numComida){
-            dataUser[userId].numComida = userMessage;
-
-            const diet = await modelContext(dataUser[userId]);
-
-            if (dataUser[userId].peso && dataUser[userId].altura && dataUser[userId].meta
-                && dataUser[userId].alergia && dataUser[userId].noGuAlimento && dataUser[userId].numComida
-            ){
-                delete dataUser[userId];
-            } 
-
-            return res.json({
-                reply: diet,
-                isFinal: true
-            });
-
-        }
     } catch (error) {
         console.error("Error procesando petición:", error);
         return res.status(500).json({

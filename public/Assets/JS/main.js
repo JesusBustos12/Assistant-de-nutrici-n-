@@ -2,9 +2,18 @@
 const inputText = document.getElementById("inputText");
 const inputBtn = document.getElementById("inputBtn");
 const boxMessages = document.querySelector(".chat__messages");
+const chatForm = document.getElementById("chatForm");
 
-//Id:
-const userId = crypto.randomUUID();
+const questions = [
+    "¿Cual es tu altura en (Cm)?",
+    "¿Cual es tu meta? (Adelgazar, mantener peso, ganar peso)",
+    "¿Le tienes alergia a algun ingrediente?",
+    "¿Que alimentos no te gustan?",
+    "¿Cuantas comidas quieres hacer por dia?"
+];
+const keys = ["peso", "altura", "meta", "alergia", "noGuAlimento", "numComida"];
+let currentStep = 0;
+const dataUser = {};
 
 //Funcion para la creacion de los mensajes:
 function createMessages(messageValue, sender){
@@ -31,13 +40,29 @@ const startDiet = async() => {
     if(!myMessage) return false;
 
     inputText.value = "";
-
-    // Deshabilitar inputs
+    
+    // Deshabilitar inputs temporalmente
     inputText.disabled = true;
     inputBtn.disabled = true;
 
-    //Añadir los argumentos:
     createMessages(myMessage, "user");
+
+    // Guardar respuesta actual
+    dataUser[keys[currentStep]] = myMessage;
+    currentStep++;
+
+    // Si aún faltan preguntas, hacer la siguiente
+    if (currentStep < keys.length) {
+        setTimeout(() => {
+            createMessages(questions[currentStep - 1], "bot");
+            inputText.disabled = false;
+            inputBtn.disabled = false;
+            inputText.focus();
+        }, 500);
+        return;
+    }
+
+    // Si ya tenemos todas las respuestas, enviar al backend
     createMessages('<div class="loader"></div>', "bot");
 
     try {
@@ -46,9 +71,7 @@ const startDiet = async() => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                id: userId, message: myMessage
-            })
+            body: JSON.stringify(dataUser)
         });
 
         const data = await response.json();
@@ -78,18 +101,20 @@ const startDiet = async() => {
         }
     } catch (error) {
         console.error("Error en la petición:", error);
+        createMessages('Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
     } finally {
         // Habilitar inputs
         inputText.disabled = false;
         inputBtn.disabled = false;
         inputText.focus();
+        
+        // Reiniciar estado si se desea otra dieta (Opcional)
+        currentStep = 0;
     }
 
 }
 
 //Eventos:
-const chatForm = document.getElementById("chatForm");
-
 if (chatForm) {
     chatForm.addEventListener("submit", (event) => {
         event.preventDefault();
