@@ -9,6 +9,7 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
+    connectTimeout: 3000, // Previene que Vercel cancele el proceso (max 10s) si TiDB tarda
     ssl: {
         rejectUnauthorized: true
     }

@@ -100,7 +100,14 @@ const startDiet = async () => {
         }, 1000);
     } catch (error) {
         console.error("Error en la petición:", error);
-        createMessages(error.message || 'Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
+        // Remover el efecto de carga reemplazando el último mensaje
+        const msgBot = document.querySelectorAll(".chat__message--ia");
+        const lastMsgBot = msgBot[msgBot.length - 1];
+        if (lastMsgBot) {
+            lastMsgBot.innerHTML = error.message || 'Hubo un error al generar la dieta. Por favor intenta de nuevo.';
+        } else {
+            createMessages(error.message || 'Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
+        }
         
         // Si el backend nos rechaza por rate limit (429), sincronizamos el límite local
         if (error.status === 429) {

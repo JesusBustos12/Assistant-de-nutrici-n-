@@ -6,7 +6,11 @@ const router = express.Router();
 
 const dietLimiter = async (req, res, next) => {
     // Obtener la IP
-    const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    let ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    // x-forwarded-for puede ser una lista separada por comas en Vercel
+    if (ip && ip.includes(',')) {
+        ip = ip.split(',')[0].trim();
+    }
     
     // Usamos UTC para consistencia
     const today = new Date().toISOString().split('T')[0]; 
