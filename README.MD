@@ -73,7 +73,8 @@ pro_4---assistant-de-nutricion-con-ia/
 Este proyecto refleja competencias de un desarrollador Full-Stack avanzado (Nivel Ssr) listo para aportar valor:
 
 - **Arquitectura de Software:** Separación de responsabilidades (MVC) y modularización nativa sin frameworks (ES Modules).
-- **Resolución de Problemas:** Adaptación del flujo de la app para persistencia de datos en entornos Serverless (Vercel).
+- **Resolución de Problemas:** Adaptación del flujo de la app para persistencia de datos y mitigación de problemas intrínsecos de arquitecturas Serverless (Vercel).
+  - *Nota técnica sobre Rate Limiting en Serverless:* El limitador de peticiones (Rate Limit) está implementado mediante `MemoryStore` en Node.js de forma intencionada para este portafolio, respaldado por sincronización con `localStorage` en el cliente. En una entrevista, esto es el pie perfecto para discutir cómo, en un entorno Serverless de producción real, el `MemoryStore` es volátil entre instancias y requeriría una conexión a un clúster de caché persistente (como Redis o Vercel KV) para garantizar un bloqueo estricto por IP inmune al borrado de caché del usuario.
 - **Backend Sólido y Seguro:** Manejo de peticiones asíncronas, Unit Testing, Rate Limiting y validación estricta.
 - **Ingeniería de Prompts Avanzada:** Control de formato estricto y manejo estadístico de parámetros ausentes.
 - **Frontend y Diseño Moderno:** Creación de UI/UX fluida con físicas elásticas, prevención de bugs de cliente (bloqueo de eventos) y sanitización de outputs.

@@ -61,8 +61,7 @@ const startDiet = async () => {
     if (currentStep === 0) {
         const usageData = checkLimit();
         if (usageData.count >= maxDietsPerDay) {
-            createMessages('Has alcanzado el límite diario de recetas generadas. ¡Vuelve mañana para seguir creando más!', "bot");
-            setInputsDisabled(true);
+            showLimitPopup();
             return false;
         }
     }
@@ -105,6 +104,7 @@ const startDiet = async () => {
             usageData.count = maxDietsPerDay;
             localStorage.setItem('nutriIA_usage', JSON.stringify(usageData));
             updateLimitIndicator();
+            showLimitPopup();
         }
     } finally {
         const usageData = checkLimit();
@@ -114,11 +114,19 @@ const startDiet = async () => {
                 createMessages("¡Dieta generada! Si quieres otra, empecemos de nuevo. ¿Cuanto pesas en (Kl)?", "bot");
             }, 1000);
         } else {
-            setInputsDisabled(true);
-            inputText.placeholder = "Límite diario alcanzado";
+            showLimitPopup();
         }
         // Reiniciar estado si se desea otra dieta
         currentStep = 0;
+    }
+}
+
+function showLimitPopup() {
+    const chatSection = document.querySelector('.layout__chat');
+    const popupSection = document.getElementById('limitPopup');
+    if (chatSection && popupSection) {
+        chatSection.classList.add('hidden');
+        popupSection.classList.remove('hidden');
     }
 }
 
@@ -134,11 +142,7 @@ const initApp = () => {
     updateLimitIndicator();
     const usageData = checkLimit();
     if (usageData.count >= maxDietsPerDay) {
-        setInputsDisabled(true);
-        inputText.placeholder = "Límite diario alcanzado";
-        setTimeout(() => {
-            createMessages('Has alcanzado el límite diario de recetas generadas. ¡Vuelve mañana para seguir creando más!', "bot");
-        }, 800);
+        showLimitPopup();
     }
 };
 
