@@ -15,8 +15,52 @@ const questions = [
 const keys = ["peso", "altura", "meta", "alergia", "noGuAlimento", "numComida"];
 let currentStep = 0;
 const dataUser = {};
+const maxDietsPerDay = 2;
+
+function checkLimit() {
+    const today = new Date().toLocaleDateString();
+    let usageData = JSON.parse(localStorage.getItem('nutriIA_usage')) || { date: today, count: 0 };
+    
+    if (usageData.date !== today) {
+        usageData = { date: today, count: 0 };
+        localStorage.setItem('nutriIA_usage', JSON.stringify(usageData));
+    }
+    
+    return usageData;
+}
+
+function updateLimitIndicator() {
+    const usageData = checkLimit();
+    const limitIndicator = document.getElementById("limitIndicator");
+    if (limitIndicator) {
+        const remaining = Math.max(0, maxDietsPerDay - usageData.count);
+        limitIndicator.textContent = `Dietas disponibles hoy: ${remaining}/${maxDietsPerDay}`;
+        
+        if (remaining <= 0) {
+            limitIndicator.classList.add("limit-reached");
+        } else {
+            limitIndicator.classList.remove("limit-reached");
+        }
+    }
+}
+
+function incrementLimit() {
+    const usageData = checkLimit();
+    usageData.count += 1;
+    localStorage.setItem('nutriIA_usage', JSON.stringify(usageData));
+    updateLimitIndicator();
+}
 
 const startDiet = async () => {
+    if (currentStep === 0) {
+        const usageData = checkLimit();
+        if (usageData.count >= maxDietsPerDay) {
+            createMessages('Has alcanzado el límite diario de recetas generadas. ¡Vuelve mañana para seguir creando más!', "bot");
+            setInputsDisabled(true);
+            return false;
+        }
+    }
+
     const myMessage = inputText.value;
     if (!myMessage) return false;
 
@@ -44,11 +88,18 @@ const startDiet = async () => {
     try {
         const reply = await sendDietRequest(dataUser);
         renderDietMarkdown(reply);
+        incrementLimit();
     } catch (error) {
         console.error("Error en la petición:", error);
         createMessages(error.message || 'Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
     } finally {
-        setInputsDisabled(false);
+        const usageData = checkLimit();
+        if (usageData.count < maxDietsPerDay) {
+            setInputsDisabled(false);
+        } else {
+            setInputsDisabled(true);
+            inputText.placeholder = "Límite diario alcanzado";
+        }
         // Reiniciar estado si se desea otra dieta
         currentStep = 0;
     }
@@ -61,3 +112,17 @@ if (chatForm) {
         startDiet();
     });
 }
+
+const initApp = () => {
+    updateLimitIndicator();
+    const usageData = checkLimit();
+    if (usageData.count >= maxDietsPerDay) {
+        setInputsDisabled(true);
+        inputText.placeholder = "Límite diario alcanzado";
+        setTimeout(() => {
+            createMessages('Has alcanzado el límite diario de recetas generadas. ¡Vuelve mañana para seguir creando más!', "bot");
+        }, 800);
+    }
+};
+
+initApp();
