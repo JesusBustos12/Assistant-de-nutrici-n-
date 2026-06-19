@@ -9,6 +9,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.set('trust proxy', 1); // Confía en el primer proxy (Vercel, Nginx, etc.) para leer correctamente la IP
+
 app.use(express.static(path.join(process.cwd(), 'public')));
 
 // Middlewares:
