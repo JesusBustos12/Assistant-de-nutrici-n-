@@ -410,6 +410,34 @@ tbody tr:hover {
     line-height: 1.5;
 }
 
+.btn-download-pdf {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 2rem;
+    padding: 1.2rem 2.4rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-primary), #059669);
+    border: none;
+    border-radius: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-download-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, #059669, var(--color-primary));
+}
+
+.btn-download-pdf:active {
+    transform: translateY(1px);
+}
+
 /* Responsive Styles */
 @media (max-width: 1200px) {
     .layout__chat {

@@ -32,6 +32,32 @@ export function renderDietMarkdown(markdownText) {
             // Se asume que markdownit está cargado de forma global en index.html
             const msgDiet = new window.markdownit({ html: false });
             lastMsgBot.innerHTML = msgDiet.render(markdownText);
+            
+            // --- Botón de Descarga PDF ---
+            const btnDownload = document.createElement("button");
+            btnDownload.classList.add("btn-download-pdf");
+            btnDownload.innerHTML = "📥 Descargar PDF";
+            
+            btnDownload.addEventListener("click", () => {
+                // Ocultar temporalmente el botón para que no salga en el PDF
+                btnDownload.style.display = 'none';
+                
+                const opt = {
+                    margin:       15,
+                    filename:     'Mi_Dieta_NutriIA.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                
+                html2pdf().set(opt).from(lastMsgBot).save().then(() => {
+                    // Restaurar el botón después de la captura
+                    btnDownload.style.display = 'inline-flex';
+                });
+            });
+            
+            lastMsgBot.appendChild(btnDownload);
+
         } catch (exception) {
             console.error(exception);
             lastMsgBot.textContent = markdownText;
