@@ -94,6 +94,10 @@ const startDiet = async () => {
         const reply = await sendDietRequest(dataUser);
         renderDietMarkdown(reply);
         incrementLimit();
+        
+        setTimeout(() => {
+            createMessages("¡Dieta generada! Si quieres otra, empecemos de nuevo. ¿Cuanto pesas en (Kl)?", "bot");
+        }, 1000);
     } catch (error) {
         console.error("Error en la petición:", error);
         createMessages(error.message || 'Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
@@ -107,15 +111,7 @@ const startDiet = async () => {
             showLimitPopup();
         }
     } finally {
-        const usageData = checkLimit();
-        if (usageData.count < maxDietsPerDay) {
-            setInputsDisabled(false);
-            setTimeout(() => {
-                createMessages("¡Dieta generada! Si quieres otra, empecemos de nuevo. ¿Cuanto pesas en (Kl)?", "bot");
-            }, 1000);
-        } else {
-            showLimitPopup();
-        }
+        setInputsDisabled(false);
         // Reiniciar estado si se desea otra dieta
         currentStep = 0;
     }
