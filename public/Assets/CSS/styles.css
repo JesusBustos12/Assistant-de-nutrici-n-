@@ -80,25 +80,78 @@ body {
     align-items: flex-start;
 }
 
-.header__limit {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--color-primary);
-    background: rgba(16, 185, 129, 0.1);
-    padding: 0.5rem 1.2rem;
-    border-radius: 2rem;
+.header__limit-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     margin-top: 0.8rem;
-    display: inline-block;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 0.6rem 1.4rem;
+    border-radius: 2rem;
     border: 1px solid rgba(16, 185, 129, 0.2);
     box-shadow: 0 4px 10px rgba(16, 185, 129, 0.05);
     transition: all 0.3s ease;
 }
 
-.header__limit.limit-reached {
-    color: #e11d48;
+.limit-bottle {
+    width: 60px;
+    height: 20px;
+    border: 2px solid var(--color-primary);
+    border-radius: 6px;
+    padding: 2px;
+    position: relative;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Fills from right to left or left to right */
+}
+
+.limit-bottle::after {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 10px;
+    background: var(--color-primary);
+    border-radius: 0 3px 3px 0;
+}
+
+.limit-bottle-fill {
+    height: 100%;
+    width: 100%; /* Se actualiza con JS */
+    background: var(--color-primary);
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s ease;
+}
+
+.limit-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.header__limit-container.limit-reached {
     background: rgba(225, 29, 72, 0.1);
     border-color: rgba(225, 29, 72, 0.2);
     box-shadow: 0 4px 10px rgba(225, 29, 72, 0.05);
+}
+
+.header__limit-container.limit-reached .limit-bottle {
+    border-color: #e11d48;
+}
+
+.header__limit-container.limit-reached .limit-bottle::after {
+    background: #e11d48;
+}
+
+.header__limit-container.limit-reached .limit-bottle-fill {
+    background: #e11d48;
+}
+
+.header__limit-container.limit-reached .limit-text {
+    color: #e11d48;
 }
 
 .layout__chat {
@@ -368,7 +421,7 @@ tbody tr:hover {
         align-items: center;
     }
 
-    .header__limit {
+    .header__limit-container {
         margin-top: 1rem;
     }
 

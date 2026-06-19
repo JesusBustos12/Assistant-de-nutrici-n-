@@ -32,14 +32,20 @@ function checkLimit() {
 function updateLimitIndicator() {
     const usageData = checkLimit();
     const limitIndicator = document.getElementById("limitIndicator");
-    if (limitIndicator) {
+    const limitBar = document.getElementById("limitBar");
+    const container = document.querySelector(".header__limit-container");
+    
+    if (limitIndicator && limitBar && container) {
         const remaining = Math.max(0, maxDietsPerDay - usageData.count);
-        limitIndicator.textContent = `Dietas disponibles hoy: ${remaining}/${maxDietsPerDay}`;
+        limitIndicator.textContent = `${remaining}/${maxDietsPerDay}`;
+        
+        const percentage = (remaining / maxDietsPerDay) * 100;
+        limitBar.style.width = `${percentage}%`;
         
         if (remaining <= 0) {
-            limitIndicator.classList.add("limit-reached");
+            container.classList.add("limit-reached");
         } else {
-            limitIndicator.classList.remove("limit-reached");
+            container.classList.remove("limit-reached");
         }
     }
 }
@@ -96,6 +102,9 @@ const startDiet = async () => {
         const usageData = checkLimit();
         if (usageData.count < maxDietsPerDay) {
             setInputsDisabled(false);
+            setTimeout(() => {
+                createMessages("¡Dieta generada! Si quieres otra, empecemos de nuevo. ¿Cuanto pesas en (Kl)?", "bot");
+            }, 1000);
         } else {
             setInputsDisabled(true);
             inputText.placeholder = "Límite diario alcanzado";
