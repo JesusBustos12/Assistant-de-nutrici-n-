@@ -12,9 +12,9 @@ const router = express.Router();
 let dietLimiter;
 try {
     dietLimiter = rateLimit({
-        windowMs: 15 * 60 * 1000, // 15 minutos
-        max: 10, // Limite a 10 solicitudes por IP por ventana de tiempo
-        message: { reply: 'Demasiadas solicitudes desde esta IP. Por favor intenta de nuevo en 15 minutos para proteger el saldo de la API.' }
+        windowMs: 24 * 60 * 60 * 1000, // 24 horas
+        max: 2, // Limite a 2 solicitudes por IP por día
+        message: { reply: 'Has alcanzado el límite diario de 2 recetas generadas. Por favor, ¡vuelve mañana!' }
     });
 } catch (e) {
     // Fallback passthrough si la librería no está instalada aún

@@ -22,7 +22,10 @@ export async function sendDietRequest(dataUser) {
                 errorMsg = errData.reply;
             }
         } catch(e) {}
-        throw new Error(errorMsg);
+        
+        const error = new Error(errorMsg);
+        error.status = response.status;
+        throw error;
     }
 
     const data = await response.json();
