@@ -575,3 +575,29 @@ tbody tr:hover {
         max-width: 100%;
     }
 }
+
+/* --- PDF Export Override Styles --- */
+.pdf-export-mode {
+    background-color: #ffffff !important;
+    color: #064e3b !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+.pdf-export-mode * {
+    color: #064e3b !important;
+}
+.pdf-export-mode thead th {
+    background-color: #059669 !important; /* Color sólido fuerte */
+    color: #ffffff !important;
+    border: 1px solid #064e3b !important;
+}
+.pdf-export-mode thead th * {
+    color: #ffffff !important;
+}
+.pdf-export-mode tbody td {
+    background-color: #ffffff !important;
+    border: 1px solid #064e3b !important;
+}
+.pdf-export-mode tbody tr:nth-child(even) td {
+    background-color: #dcfce7 !important; /* Verde claro sólido, sin opacidad */
+}

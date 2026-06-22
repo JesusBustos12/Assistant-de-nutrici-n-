@@ -41,18 +41,20 @@ export function renderDietMarkdown(markdownText) {
             btnDownload.addEventListener("click", () => {
                 // Ocultar temporalmente el botón para que no salga en el PDF
                 btnDownload.style.display = 'none';
+                lastMsgBot.classList.add('pdf-export-mode');
                 
                 const opt = {
                     margin:       15,
                     filename:     'Mi_Dieta_NutriIA.pdf',
-                    image:        { type: 'jpeg', quality: 0.98 },
+                    image:        { type: 'jpeg', quality: 1 },
                     html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
                 
                 html2pdf().set(opt).from(lastMsgBot).save().then(() => {
-                    // Restaurar el botón después de la captura
+                    // Restaurar el botón y estilos después de la captura
                     btnDownload.style.display = 'inline-flex';
+                    lastMsgBot.classList.remove('pdf-export-mode');
                 });
             });
             
