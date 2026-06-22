@@ -15,13 +15,15 @@ Construido con **Node.js, Express, JavaScript Vanilla (ES Modules) y CSS puro**,
 - **Exportación Segura a PDF**: Funcionalidad de descarga de recetas en formato PDF procesada de forma segura en el lado del cliente (Client-side rendering). Esto optimiza los recursos del servidor y protege la privacidad de los datos generados al no requerir viajes de retorno (round-trips) al backend.
 - **Optimización SEO**: Implementación de etiquetas semánticas, meta descripciones y Open Graph (OG) adaptadas al contexto de la aplicación, optimizando el posicionamiento web y la visualización enriquecida al compartir enlaces en redes.
 - **Generación Inteligente**: Corrección de entradas inválidas y manejo de datos incompletos mediante prompts avanzados, respetando estrictamente las preferencias del usuario.
+- **Protección contra Prompt Injection**: Integración de validación estricta de esquemas de datos en el servidor utilizando **Zod**, previniendo ataques maliciosos o el envío masivo de caracteres hacia la API de OpenAI.
+- **Exportación a PDF de Alto Contraste**: Generación de documentos PDF limpios con un modo de "Exportación" que desactiva las transparencias del *Glassmorphism* en favor de colores sólidos y vibrantes, asegurando una lectura óptima fuera de la pantalla.
 
 ## Tecnologías Utilizadas
 
 - **Backend**: Node.js, Express, MySQL (mysql2).
 - **IA**: OpenAI Chat Completions API (GPT-4o-mini).
 - **Frontend**: JavaScript Vanilla (ES6 Modules), HTML5 semántico, CSS3 puro (CSS Variables, Glassmorphism, animaciones).
-- **Librerías y Herramientas**: `dotenv` para gestión de entorno, `markdown-it` para renderizado seguro de Markdown, `html2pdf.js` para generación de documentos PDF.
+- **Librerías y Herramientas**: `dotenv` para gestión de entorno, `zod` para validación estricta de *payloads*, `markdown-it` para renderizado seguro de Markdown, `html2pdf.js` para generación de documentos.
 - **Testing**: Jest + Supertest para pruebas unitarias automatizadas.
 
 ## Estructura del Proyecto
