@@ -15,31 +15,30 @@ const questions = [
 const keys = ["peso", "altura", "meta", "alergia", "noGuAlimento", "numComida"];
 let currentStep = 0;
 const dataUser = {};
-const maxDietsPerDay = 2;
-
-function checkLimit() {
-    const today = new Date().toLocaleDateString();
-    let usageData = JSON.parse(localStorage.getItem('nutriIA_usage')) || { date: today, count: 0 };
-    
-    if (usageData.date !== today) {
-        usageData = { date: today, count: 0 };
-        localStorage.setItem('nutriIA_usage', JSON.stringify(usageData));
+async function fetchLimitStatus() {
+    try {
+        const response = await fetch('/api/assistant-diet/limit-status');
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch (error) {
+        console.error("Error al obtener limite:", error);
     }
-    
-    return usageData;
+    // Fallback if network fails
+    return { count: 0, max: 2 };
 }
 
-function updateLimitIndicator() {
-    const usageData = checkLimit();
+async function updateLimitIndicator() {
+    const { count, max } = await fetchLimitStatus();
     const limitIndicator = document.getElementById("limitIndicator");
     const limitBar = document.getElementById("limitBar");
     const container = document.querySelector(".header__limit-container");
     
     if (limitIndicator && limitBar && container) {
-        const remaining = Math.max(0, maxDietsPerDay - usageData.count);
-        limitIndicator.textContent = `${remaining}/${maxDietsPerDay}`;
+        const remaining = Math.max(0, max - count);
+        limitIndicator.textContent = `${remaining}/${max}`;
         
-        const percentage = (remaining / maxDietsPerDay) * 100;
+        const percentage = (remaining / max) * 100;
         limitBar.style.width = `${percentage}%`;
         
         if (remaining <= 0) {
@@ -47,20 +46,15 @@ function updateLimitIndicator() {
         } else {
             container.classList.remove("limit-reached");
         }
+        return remaining;
     }
-}
-
-function incrementLimit() {
-    const usageData = checkLimit();
-    usageData.count += 1;
-    localStorage.setItem('nutriIA_usage', JSON.stringify(usageData));
-    updateLimitIndicator();
+    return Math.max(0, max - count);
 }
 
 const startDiet = async () => {
     if (currentStep === 0) {
-        const usageData = checkLimit();
-        if (usageData.count >= maxDietsPerDay) {
+        const remaining = await updateLimitIndicator();
+        if (remaining <= 0) {
             showLimitPopup();
             return false;
         }
@@ -93,7 +87,8 @@ const startDiet = async () => {
     try {
         const reply = await sendDietRequest(dataUser);
         renderDietMarkdown(reply);
-        incrementLimit();
+        
+        await updateLimitIndicator();
         
         setTimeout(() => {
             createMessages("¡Dieta generada! Si quieres otra, empecemos de nuevo. ¿Cuanto pesas en (Kl)?", "bot");
@@ -109,12 +104,9 @@ const startDiet = async () => {
             createMessages(error.message || 'Hubo un error al generar la dieta. Por favor intenta de nuevo.', 'bot');
         }
         
-        // Si el backend nos rechaza por rate limit (429), sincronizamos el límite local
+        // Si el backend nos rechaza por rate limit (429), actualizamos UI
         if (error.status === 429) {
-            const usageData = checkLimit();
-            usageData.count = maxDietsPerDay;
-            localStorage.setItem('nutriIA_usage', JSON.stringify(usageData));
-            updateLimitIndicator();
+            await updateLimitIndicator();
             showLimitPopup();
         }
     } finally {
@@ -141,10 +133,9 @@ if (chatForm) {
     });
 }
 
-const initApp = () => {
-    updateLimitIndicator();
-    const usageData = checkLimit();
-    if (usageData.count >= maxDietsPerDay) {
+const initApp = async () => {
+    const remaining = await updateLimitIndicator();
+    if (remaining <= 0) {
         showLimitPopup();
     }
 };

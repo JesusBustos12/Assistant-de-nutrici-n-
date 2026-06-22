@@ -52,6 +52,41 @@ const dietLimiter = async (req, res, next) => {
     }
 };
 
+router.get('/limit-status', async (req, res) => {
+    let ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    if (ip && ip.includes(',')) {
+        ip = ip.split(',')[0].trim();
+    }
+    
+    const today = new Date().toISOString().split('T')[0]; 
+
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS rate_limits (
+                ip VARCHAR(45) PRIMARY KEY,
+                requests INT DEFAULT 1,
+                last_date DATE
+            )
+        `);
+
+        const [rows] = await pool.query("SELECT requests, DATE_FORMAT(last_date, '%Y-%m-%d') as last_date_str FROM rate_limits WHERE ip = ?", [ip]);
+
+        if (rows.length === 0) {
+            return res.json({ count: 0, max: 2 });
+        }
+
+        const record = rows[0];
+        if (record.last_date_str !== today) {
+            return res.json({ count: 0, max: 2 });
+        }
+
+        return res.json({ count: record.requests, max: 2 });
+    } catch (error) {
+        console.error("Error al obtener límite desde DB:", error);
+        res.status(500).json({ error: "Error interno" });
+    }
+});
+
 router.post('/', dietLimiter, handleDietRequest);
 
 export default router;

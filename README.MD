@@ -1,55 +1,37 @@
-# Asistente de Nutrición con IA - Portafolio Full-Stack (Arquitectura Senior)
+# Asistente de Nutrición con IA
 
 ## Descripción
-Aplicación web full-stack que genera **dietas personalizadas** utilizando la API de Chat Completions de OpenAI (modelo GPT-4o-mini).  
+Aplicación web full-stack que genera **dietas personalizadas** utilizando la API de Chat Completions de OpenAI (modelo GPT-4o-mini).
 
-El usuario responde paso a paso a una serie de preguntas conversacionales sobre su peso, altura, meta nutricional (adelgazar, mantener peso o ganar masa muscular), alergias, alimentos que no le gustan y número de comidas al día. Una vez recopilada la información, la IA genera un plan semanal completo en formato de tabla Markdown con las siguientes columnas:
+El usuario responde a una serie de preguntas mediante una interfaz conversacional, indicando datos como peso, altura, metas nutricionales, alergias y preferencias alimenticias. Una vez recopilada la información, la IA genera un plan semanal estructurado en formato Markdown.
 
-- Día
-- Platillos
-- Ingredientes
-- Calorías
-- Total de calorías del día
-- Número total de platillos (estrictamente el número solicitado por el usuario)
+Construido con **Node.js, Express, JavaScript Vanilla (ES Modules) y CSS puro**, el proyecto se enfoca en rendimiento, escalabilidad y una experiencia de usuario fluida con un diseño moderno (Glassmorphism).
 
-Todo ello con un diseño conversacional con estilo "Premium Lite" (Glassmorphism), construido con **Node.js, Express, JavaScript Vanilla (ES Modules) y CSS puro** (sin frameworks). El proyecto cuenta con una arquitectura de nivel empresarial (MVC), seguridad avanzada (Rate Limiting y protección XSS) y un sistema de estado en el cliente para soportar despliegues Serverless.
+## Características Principales
 
-Perfecto para demostrar habilidades full-stack reales y avanzadas en un portafolio profesional.
+- **Arquitectura MVC y ES Modules**: Código modular separando rutas, controladores, servicios y lógica de UI/API.
+- **Seguridad y Rate Limiting Avanzado**: Implementación de límite de peticiones (Rate Limiting) validado por una base de datos MySQL en la nube. Emplea un sistema de control por IP para mitigar vulnerabilidades y abusos, previniendo evasiones mediante la eliminación de datos del navegador (Clear Data). Las peticiones se restablecen de manera automatizada cada 24 horas.
+- **Interfaz Reactiva e Inteligente**: Flujo conversacional optimizado y componentes visuales que reflejan el estado del servidor en tiempo real. La barra de límite de peticiones se sincroniza dinámicamente con la lógica del backend mediante validaciones por IP, garantizando consistencia visual inquebrantable.
+- **Exportación Segura a PDF**: Funcionalidad de descarga de recetas en formato PDF procesada de forma segura en el lado del cliente (Client-side rendering). Esto optimiza los recursos del servidor y protege la privacidad de los datos generados al no requerir viajes de retorno (round-trips) al backend.
+- **Optimización SEO**: Implementación de etiquetas semánticas, meta descripciones y Open Graph (OG) adaptadas al contexto de la aplicación, optimizando el posicionamiento web y la visualización enriquecida al compartir enlaces en redes.
+- **Generación Inteligente**: Corrección de entradas inválidas y manejo de datos incompletos mediante prompts avanzados, respetando estrictamente las preferencias del usuario.
 
-## Objetivo
-Como desarrollador autodidacta, creé este proyecto para:
+## Tecnologías Utilizadas
 
-- Mostrar dominio completo de Node.js + Express en el backend con una arquitectura **MVC (Model-View-Controller)** escalable.
-- Integrar de forma segura y eficiente la API de chat de OpenAI mediante servicios modulares y tipado con JSDoc.
-- Diseñar prompts avanzados que manejen datos incompletos o erróneos basándose en estadística o probabilidad.
-- Construir interfaces web atractivas con CSS moderno (animaciones elásticas, CSS variables, glassmorphism) mejorando la experiencia del usuario.
-- Aplicar ingeniería de seguridad web: protección contra inyecciones XSS, ocultamiento de API Keys y prevención de abusos con **Rate Limiting**.
-- Solucionar problemas arquitectónicos complejos, como la pérdida de estado en entornos **Serverless** (Vercel), trasladando la máquina de estados al cliente de forma eficiente.
-- Implementar Unit Testing automatizado en el servidor para garantizar la robustez del código.
+- **Backend**: Node.js, Express, MySQL (mysql2).
+- **IA**: OpenAI Chat Completions API (GPT-4o-mini).
+- **Frontend**: JavaScript Vanilla (ES6 Modules), HTML5 semántico, CSS3 puro (CSS Variables, Glassmorphism, animaciones).
+- **Librerías y Herramientas**: `dotenv` para gestión de entorno, `markdown-it` para renderizado seguro de Markdown, `html2pdf.js` para generación de documentos PDF.
+- **Testing**: Jest + Supertest para pruebas unitarias automatizadas.
 
-## Características
-- **Arquitectura MVC y ES Modules**: Código 100% modular, separando rutas, controladores, servicios y lógica de UI/API sin requerir empaquetadores complejos.
-- **Máquina de Estado en el Cliente**: Flujo conversacional optimizado que recolecta respuestas localmente para hacer una única petición segura al backend, ahorrando costos e invocaciones lambda.
-- **Diseño Premium y Dinámico**: Interfaz que guía al usuario con transiciones fluidas, feedback visual y bloqueo interactivo para prevenir el spam.
-- **Seguridad y Rate Limiting**: Limitador de peticiones integrado para proteger los créditos de OpenAI de ataques de denegación o bots.
-- **Generación Inteligente**: Corrige entradas inválidas, completa datos faltantes con valores probables y respeta estrictamente preferencias.
-- **Testing Automatizado**: Pruebas unitarias configuradas para validar la robustez de los endpoints.
+## Estructura del Proyecto
 
-## Tecnologías utilizadas
-- **Node.js + Express** → Servidor backend, rutas y middleware de seguridad.
-- **express-rate-limit** → Protección contra abusos de la API.
-- **OpenAI Chat Completions API (GPT-4o-mini)** → Generación de dietas con control estricto de formato.
-- **JavaScript Vanilla (ES6 Modules)** → Frontend modular (`api.js`, `ui.js`, `main.js`) y fetch nativo.
-- **Jest + Supertest** → Pruebas unitarias automatizadas.
-- **HTML5 + CSS3 puro** → Diseño Glassmorphism, CSS Variables, animaciones `@keyframes` y diseño completamente responsive.
-- **dotenv** → Gestión segura de variables de entorno.
-- **markdown-it** → Renderizado seguro de Markdown a HTML en el cliente.
-
-## Estructura del proyecto
+```text
 pro_4---assistant-de-nutricion-con-ia/
 ├── app.js                    # Punto de entrada del servidor Express
+├── config/                   # Configuraciones de conexión (Base de datos)
 ├── routes/
-│   └── dietRoutes.js         # Enrutador de la API y middlewares
+│   └── dietRoutes.js         # Enrutador de la API y middlewares de límite
 ├── controllers/
 │   └── dietController.js     # Lógica de validación HTTP y respuestas
 ├── services/
@@ -57,45 +39,21 @@ pro_4---assistant-de-nutricion-con-ia/
 ├── tests/
 │   └── diet.test.js          # Pruebas unitarias con Jest
 ├── package.json
-├── .env.example              # Plantilla para variables de entorno
-├── .gitignore                
 ├── public/
-│   ├── index.html            # UI principal
+│   ├── index.html            # UI principal, estructura semántica y meta tags (SEO)
 │   ├── Assets/
-│   │   ├── CSS/styles.css    # Estilos Premium (Glassmorphism, variables)
-│   │   ├── JS/api.js         # Fetch y comunicación con backend
-│   │   ├── JS/ui.js          # Manipulación del DOM y renderizado Markdown
+│   │   ├── CSS/styles.css    # Estilos (Glassmorphism, variables)
+│   │   ├── JS/api.js         # Fetch y comunicación asíncrona con el backend
+│   │   ├── JS/ui.js          # Manipulación del DOM, Markdown y Exportación PDF
 │   │   ├── JS/main.js        # Orquestador del estado de la app
 │   │   └── Imgs/             
 └── README.md                 # Esta documentación
-
-## Habilidades demostradas
-Este proyecto refleja competencias de un desarrollador Full-Stack avanzado (Nivel Ssr) listo para aportar valor:
-
-- **Arquitectura de Software:** Separación de responsabilidades (MVC) y modularización nativa sin frameworks (ES Modules).
-- **Resolución de Problemas:** Adaptación del flujo de la app para persistencia de datos y mitigación de problemas intrínsecos de arquitecturas Serverless (Vercel).
-- **Backend Sólido y Seguro:** Manejo de peticiones asíncronas, Unit Testing, Rate Limiting y validación estricta.
-- **Ingeniería de Prompts Avanzada:** Control de formato estricto y manejo estadístico de parámetros ausentes.
-- **Frontend y Diseño Moderno:** Creación de UI/UX fluida con físicas elásticas, prevención de bugs de cliente (bloqueo de eventos) y sanitización de outputs.
-- Producto completo, seguro, escalable y listo para producción empresarial.
+```
 
 ## Demo en vivo
-(https://assistant-de-nutrici-n.vercel.app/)
-
-## Notas para empleadores
-Este es uno de mis proyectos full-stack más completos y robustos hasta la fecha. Lo construí desde cero enfocándome tanto en la funcionalidad y experiencia de usuario, como en la calidad subyacente del código. Demuestra que:
-
-- Entiendo y aplico patrones de diseño de software (MVC, Módulos).
-- Domino backend y frontend sin depender de frameworks pesados, conociendo a fondo JavaScript.
-- Me preocupo por la seguridad, el testing automatizado y la protección de recursos en la nube.
-- Escribo prompts estructurados que garantizan resultados consistentes en Inteligencia Artificial.
-- Estoy capacitado para identificar problemas de infraestructura (como la pérdida de estado en Serverless) y solucionarlos con reingeniería inteligente.
-
-Estoy 100% listo para aportar valor real en un equipo como Full-Stack Developer. Busco mi primera oportunidad profesional y ¡me encantaría trabajar contigo!
+https://assistant-de-nutrici-n.vercel.app/
 
 ## Contacto
-- **GitHub:** github.com/JesusBustos12
-- **LinkedIn:** linkedin.com/in/jesus-bustos-arizmendi-325329283
+- **GitHub:** [JesusBustos12](https://github.com/JesusBustos12)
+- **LinkedIn:** [Jesus Bustos Arizmendi](https://linkedin.com/in/jesus-bustos-arizmendi-325329283)
 - **Correo:** jesusbustosarizmendi0@gmail.com
-
-¡Gracias por revisar mi trabajo! 🚀
