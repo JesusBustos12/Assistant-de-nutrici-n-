@@ -578,35 +578,45 @@ tbody tr:hover {
 
 /* --- PDF Export Override Styles --- */
 .pdf-export-mode {
-    background: #ffffff !important;
-    color: #000000 !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
     box-shadow: none !important;
-    border: none !important;
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
 }
 .pdf-export-mode * {
     color: #000000 !important;
-    font-weight: 600 !important;
+    text-shadow: none !important;
+    font-weight: 700 !important; /* Forzar negrita en texto general para mejor renderizado */
 }
 .pdf-export-mode table {
     border-collapse: collapse !important;
     width: 100% !important;
 }
 .pdf-export-mode thead th {
-    background: #059669 !important; /* Color sólido fuerte que sobreescribe el gradiente */
+    background-color: #059669 !important;
+    background-image: none !important; /* Elimina el gradiente problemático */
     color: #ffffff !important;
-    border: 2px solid #059669 !important;
+    border-width: 2px !important;
+    border-style: solid !important;
+    border-color: #059669 !important;
+    font-weight: 800 !important; /* Extra negrita */
 }
 .pdf-export-mode thead th * {
     color: #ffffff !important;
-    font-weight: bold !important;
+    font-weight: 800 !important;
 }
 .pdf-export-mode tbody td {
-    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
     color: #000000 !important;
-    border: 1px solid #059669 !important;
-    font-weight: 600 !important;
+    border-width: 1px !important;
+    border-style: solid !important;
+    border-color: #059669 !important;
+    font-weight: 700 !important;
 }
 .pdf-export-mode tbody tr:nth-child(even) td {
-    background: #dcfce7 !important; /* Verde claro sólido */
-    color: #000000 !important;
+    background-color: #dcfce7 !important;
+    background-image: none !important;
 }
