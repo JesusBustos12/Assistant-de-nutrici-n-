@@ -584,6 +584,8 @@ tbody tr:hover {
     opacity: 1 !important;
     animation: none !important;
     transform: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
 }
 .pdf-export-mode * {
     color: #000000 !important;
@@ -593,6 +595,8 @@ tbody tr:hover {
 .pdf-export-mode table {
     border-collapse: collapse !important;
     width: 100% !important;
+    table-layout: fixed !important;
+    word-wrap: break-word !important;
 }
 .pdf-export-mode thead th {
     background-color: #059669 !important;
