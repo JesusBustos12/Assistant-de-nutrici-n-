@@ -479,22 +479,24 @@ tbody tr:hover {
 @media (max-width: 768px) {
     .layout {
         width: 100%;
+        height: 100dvh;
     }
 
     .layout__header {
         flex-direction: column;
         text-align: center;
+        padding: 1rem;
     }
 
     .header__img {
         margin-right: 0;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .header__title {
-        font-size: 3rem;
-        word-spacing: 0.2rem;
-        letter-spacing: 0.1rem;
+        font-size: 2.4rem;
+        word-spacing: 0.1rem;
+        letter-spacing: 0.05rem;
     }
 
     .header__info {
@@ -502,28 +504,42 @@ tbody tr:hover {
     }
 
     .header__limit-container {
-        margin-top: 1rem;
+        margin-top: 0.5rem;
     }
 
     .layout__chat {
         width: 95%;
-        padding: 1.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
 
     .chat__messages {
-        padding: 1.5rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
     }
 
     .chat__message {
-        max-width: 90%;
+        max-width: 95%;
     }
 
     .chat__message--user, .chat__message--bot {
-        margin-top: 1.5rem;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+    
+    .chat__inputs {
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    #inputText {
+        flex: 3;
+        font-size: 1.4rem;
         padding: 1rem;
     }
 
-    #inputText, #inputBtn {
+    #inputBtn {
+        flex: 1;
         font-size: 1.4rem;
         padding: 1rem;
     }
